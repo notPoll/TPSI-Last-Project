@@ -1,0 +1,81 @@
+[
+  {
+    "id": "c1a7aa7b.d29bc8",
+    "type": "http in",
+    "z": "f45e6f78.f58d9",
+    "name": "",
+    "url": "/games",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 120,
+    "y": 60,
+    "wires": [["57d5b534.ae84fc"]]
+  },
+  {
+    "id": "57d5b534.ae84fc",
+    "type": "function",
+    "z": "f45e6f78.f58d9",
+    "name": "Prepare API Request",
+    "func": "msg.headers = {\n    'X-RapidAPI-Key': '9708325b4amsheee06dc83571f35p1cb585jsn3b7c7d8550f6',\n    'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'\n};\nmsg.method = 'GET';\nmsg.url = 'https://free-to-play-games-database.p.rapidapi.com/api/games';\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "x": 300,
+    "y": 60,
+    "wires": [["da8cb7b5.717ce8"]]
+  },
+  {
+    "id": "da8cb7b5.717ce8",
+    "type": "http request",
+    "z": "f45e6f78.f58d9",
+    "name": "",
+    "method": "use",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "proxy": "",
+    "authType": "",
+    "x": 500,
+    "y": 60,
+    "wires": [["a6c55dfb.0e60e"]]
+  },
+  {
+    "id": "a6c55dfb.0e60e",
+    "type": "json",
+    "z": "f45e6f78.f58d9",
+    "name": "Parse JSON",
+    "property": "payload",
+    "action": "",
+    "pretty": false,
+    "x": 700,
+    "y": 60,
+    "wires": [["fa5bdbad.476498"]]
+  },
+  {
+    "id": "fa5bdbad.476498",
+    "type": "template",
+    "z": "f45e6f78.f58d9",
+    "name": "Format HTML",
+    "field": "payload",
+    "fieldType": "msg",
+    "format": "handlebars",
+    "syntax": "mustache",
+    "template": "<html>\n<head>\n  <title>Free-to-Play Games</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n    }\n    h1 {\n      color: #333;\n    }\n    ul {\n      list-style-type: none;\n      padding: 0;\n    }\n    li {\n      background: #f4f4f4;\n      margin: 10px 0;\n      padding: 10px;\n      border: 1px solid #ddd;\n    }\n    li a {\n      text-decoration: none;\n      color: #333;\n      font-weight: bold;\n    }\n  </style>\n</head>\n<body>\n  <h1>Lista di Giochi Free-to-Play</h1>\n  <ul>\n    {{#payload}}\n    <li>\n      <a href=\"{{game_url}}\" target=\"_blank\">{{title}}</a> - {{genre}}\n    </li>\n    {{/payload}}\n  </ul>\n</body>\n</html>",
+    "output": "str",
+    "x": 900,
+    "y": 60,
+    "wires": [["c178eebc.2e252"]]
+  },
+  {
+    "id": "c178eebc.2e252",
+    "type": "http response",
+    "z": "f45e6f78.f58d9",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 1100,
+    "y": 60,
+    "wires": []
+  }
+]
